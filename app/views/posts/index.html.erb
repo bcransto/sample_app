@@ -1,0 +1,23 @@
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h1>Blog Posts</h1>
+    <% if logged_in? %>
+      <%= link_to "New Post", new_post_path, style: "padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;" %>
+    <% end %>
+  </div>
+  
+  <% if @posts.any? %>
+    <% @posts.each do |post| %>
+      <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+        <h2><%= link_to post.title, post, style: "color: #333; text-decoration: none;" %></h2>
+        <p style="color: #666; font-size: 14px;">
+          By <%= post.author_name %> • <%= post.created_at.strftime("%B %d, %Y") %>
+        </p>
+        <p><%= truncate(post.content, length: 200) %></p>
+        <%= link_to "Read more →", post, style: "color: #007bff; text-decoration: none;" %>
+      </div>
+    <% end %>
+  <% else %>
+    <p style="text-align: center; color: #666; padding: 40px;">No posts yet. Be the first to create one!</p>
+  <% end %>
+</div>

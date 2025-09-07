@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Sample App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <nav style="background: #333; padding: 15px;">
+      <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <%= link_to "Simple Blog", root_path, style: "color: white; text-decoration: none; font-size: 20px; font-weight: bold;" %>
+        </div>
+        <div>
+          <% if logged_in? %>
+            <span style="color: white; margin-right: 20px;">
+              Welcome, <%= current_user['first_name'] %>
+            </span>
+            <%= link_to "New Post", new_post_path, style: "color: white; text-decoration: none; margin-right: 20px;" %>
+            <% if current_user['role'] == 'teacher' %>
+              <%= link_to "My Students", students_path, style: "color: white; text-decoration: none; margin-right: 20px;" %>
+            <% end %>
+            <span style="color: #888; margin-right: 10px; font-size: 12px;">[Role: <%= current_user['role'] %>]</span>
+            <%= link_to "Logout", logout_path, data: { turbo_method: :delete }, style: "color: white; text-decoration: none;" %>
+          <% else %>
+            <%= link_to "Login", login_path, style: "color: white; text-decoration: none;" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+    
+    <% if notice.present? %>
+      <div style="background: #d4edda; color: #155724; padding: 10px; text-align: center;">
+        <%= notice %>
+      </div>
+    <% end %>
+    
+    <% if alert.present? %>
+      <div style="background: #f8d7da; color: #721c24; padding: 10px; text-align: center;">
+        <%= alert %>
+      </div>
+    <% end %>
+    
+    <%= yield %>
+    
+    <% if logged_in? %>
+      <script>
+        console.log('%c==================================================', 'color: #007bff; font-weight: bold;');
+        console.log('%cUSER LOGGED IN', 'color: #28a745; font-size: 16px; font-weight: bold;');
+        console.log('%c==================================================', 'color: #007bff; font-weight: bold;');
+        console.log('User Data:', <%= current_user.to_json.html_safe %>);
+        console.log('User ID:', '<%= current_user['id'] %>');
+        console.log('External ID:', '<%= current_user['external_id'] %>');
+        console.log('Email:', '<%= current_user['email'] %>');
+        console.log('Name:', '<%= current_user['first_name'] %> <%= current_user['last_name'] %>');
+        console.log('Role:', '<%= current_user['role'] %>');
+        console.log('%c==================================================', 'color: #007bff; font-weight: bold;');
+      </script>
+    <% end %>
+  </body>
+</html>

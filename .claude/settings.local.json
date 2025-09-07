@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ruby --version)",
+      "Bash(rails --version)",
+      "Bash(rbenv versions:*)",
+      "Bash(rails new:*)",
+      "Bash(rails generate model:*)",
+      "Bash(bundle install:*)",
+      "Bash(rails:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
